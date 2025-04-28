@@ -4,28 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For My Avni ❤️ | From Atharv</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
-        // IMPORTANT: EmailJS credentials
-        const EMAILJS_CONFIG = {
-            PUBLIC_KEY: "n064u9D7AVaZyzqdUSKBL",
-            SERVICE_ID: "En-xIbumQ0LrlgXVY",
-            TEMPLATE_ID: "template_t6xuqth",
-            TO_EMAIL: "atharvmotghare07@gmail.com"
-        };
+        // Cache DOM elements for better performance
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = {
+                examTimeline: document.getElementById('examTimeline'),
+                noteCard: document.getElementById('noteCard'),
+                newNoteBtn: document.getElementById('newNoteBtn'),
+                themeToggle: document.getElementById('themeToggle'),
+                mobileMenu: document.getElementById('mobileMenu'),
+                navMenu: document.querySelector('.nav-menu'),
+                preloader: document.querySelector('.preloader')
+            };
 
-        // Initialize EmailJS with debug mode
-        (function() {
-            try {
-                emailjs.init({
-                    publicKey: EMAILJS_CONFIG.PUBLIC_KEY,
-                    debug: true
-                });
-                console.log("EmailJS initialized successfully");
-            } catch (error) {
-                console.error("EmailJS initialization failed:", error);
+            // Store elements globally
+            window.appElements = elements;
+        });
+
+        // Optimize the saveExamFeedback function
+        async function saveExamFeedback(examIndex, feedback) {
+            const exam = exams[examIndex];
+            const currentDate = new Date().toLocaleString();
+            
+            if (!feedback.trim()) {
+                showToast('Please enter your feedback before submitting.', 'error');
+                return;
             }
-        })();
+
+            const submitButton = document.querySelector(`#exam-${examIndex} .save-feedback-btn`);
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Sending...';
+            submitButton.disabled = true;
+
+            try {
+                // Create a hidden form and submit it
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'https://formsubmit.co/atharvmotghare07@gmail.com';
+
+                // Add form fields
+                const fields = {
+                    exam_subject: exam.subject,
+                    exam_date: exam.date,
+                    feedback_text: feedback,
+                    submission_date: currentDate,
+                    _subject: `Exam Feedback: ${exam.subject}`,
+                    _template: 'table'
+                };
+
+                for (const [name, value] of Object.entries(fields)) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    form.appendChild(input);
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+
+                // Store feedback locally
+                exam.feedback = feedback;
+                localStorage.setItem('examFeedback', JSON.stringify(exams));
+
+                // Update UI
+                updateFeedbackUI(examIndex, feedback, currentDate);
+                showToast('Feedback sent successfully!');
+
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Failed to save feedback. Please try again.', 'error');
+            } finally {
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
+        }
+
+        // Optimize performance by debouncing scroll events
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Optimize scroll handling
+        const handleScroll = debounce(() => {
+            const scrollPosition = window.scrollY;
+            
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-menu a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, 100);
+
+        // Add optimized event listeners
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', debounce(() => {
+            generateFloatingHearts();
+            generateFooterHearts();
+        }, 100));
+
+        // Load saved preferences immediately
+        loadPreferences();
 
         // Add a function to validate the configuration
         function validateEmailJSConfig() {
@@ -1330,267 +1427,76 @@
             const exam = exams[examIndex];
             const currentDate = new Date().toLocaleString();
             
-            // Validate feedback
             if (!feedback.trim()) {
                 showToast('Please enter your feedback before submitting.', 'error');
                 return;
             }
 
-            // Show loading state
             const submitButton = document.querySelector(`#exam-${examIndex} .save-feedback-btn`);
             const originalText = submitButton.textContent;
             submitButton.textContent = 'Sending...';
             submitButton.disabled = true;
-            
+
             try {
-                console.log("Preparing to send email...");
-                
-                const templateParams = {
-                    to_name: "Atharv",
-                    from_name: "Avni",
-                    to_email: EMAILJS_CONFIG.TO_EMAIL,
-                    subject: `Exam Feedback: ${exam.subject}`,
-                    exam_date: exam.date,
+                // Create a hidden form and submit it
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'https://formsubmit.co/atharvmotghare07@gmail.com';
+
+                // Add form fields
+                const fields = {
                     exam_subject: exam.subject,
+                    exam_date: exam.date,
                     feedback_text: feedback,
                     submission_date: currentDate,
-                    message: feedback
+                    _subject: `Exam Feedback: ${exam.subject}`,
+                    _template: 'table'
                 };
 
-                // Send email with all parameters
-                const response = await emailjs.send(
-                    EMAILJS_CONFIG.SERVICE_ID,
-                    EMAILJS_CONFIG.TEMPLATE_ID,
-                    templateParams,
-                    EMAILJS_CONFIG.PUBLIC_KEY
-                );
+                for (const [name, value] of Object.entries(fields)) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    form.appendChild(input);
+                }
 
-                console.log("Email sent successfully!", response);
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
 
-                // Update local storage and UI
+                // Store feedback locally
                 exam.feedback = feedback;
                 localStorage.setItem('examFeedback', JSON.stringify(exams));
-                showToast('Feedback sent successfully! Check your email.');
-                
+
                 // Update UI
-                const feedbackSection = document.querySelector(`#exam-${examIndex} .feedback-section`);
-                if (feedbackSection) {
-                    feedbackSection.innerHTML = `
-                        <div class="feedback-display">
-                            <h4>Your Thoughts</h4>
-                            <p>${feedback}</p>
-                            <small>Submitted on: ${currentDate}</small>
-                            <div class="feedback-actions">
-                                <button class="edit-feedback-btn" onclick="editFeedback(${examIndex})">Edit Feedback</button>
-                            </div>
-                        </div>
-                    `;
-                }
+                updateFeedbackUI(examIndex, feedback, currentDate);
+                showToast('Feedback sent successfully!');
+
             } catch (error) {
-                console.error('Detailed error information:', {
-                    error: error,
-                    message: error.message || 'Unknown error',
-                    text: error.text,
-                    status: error.status
-                });
-                
-                showToast(`Failed to send feedback: ${error.text || error.message || 'Unknown error'}. Please try again.`, 'error');
-                
-                // Reset button state
+                console.error('Error:', error);
+                showToast('Failed to save feedback. Please try again.', 'error');
+            } finally {
                 submitButton.textContent = originalText;
                 submitButton.disabled = false;
             }
         }
 
-        // Add a test function to verify EmailJS configuration
-        function testEmailConfig() {
-            console.log("Testing EmailJS configuration...");
-            
-            // Validate configuration first
-            const validation = validateEmailJSConfig();
-            if (!validation.isValid) {
-                console.error("Configuration issues:", validation.issues);
-                showToast(`Configuration error: ${validation.issues.join(", ")}`, 'error');
-                return;
-            }
-
-            // Log current configuration
-            console.log("Current configuration:", {
-                serviceId: EMAILJS_CONFIG.SERVICE_ID,
-                templateId: EMAILJS_CONFIG.TEMPLATE_ID,
-                publicKey: EMAILJS_CONFIG.PUBLIC_KEY ? "Set" : "Not set"
-            });
-
-            const testParams = {
-                to_name: "Atharv",
-                from_name: "Avni",
-                to_email: EMAILJS_CONFIG.TO_EMAIL,
-                subject: "Test Email",
-                message: "This is a test email to verify the configuration.",
-                exam_subject: "Test Subject",
-                exam_date: new Date().toLocaleDateString(),
-                feedback_text: "Test feedback",
-                submission_date: new Date().toLocaleString()
-            };
-
-            // Use the newer sendForm method
-            emailjs.send(
-                EMAILJS_CONFIG.SERVICE_ID,
-                EMAILJS_CONFIG.TEMPLATE_ID,
-                testParams,
-                EMAILJS_CONFIG.PUBLIC_KEY
-            ).then(
-                function(response) {
-                    console.log("TEST EMAIL SENT!", {
-                        status: response.status,
-                        text: response.text,
-                        response: response
-                    });
-                    showToast('Test email sent successfully!');
-                },
-                function(error) {
-                    console.error("TEST EMAIL FAILED:", {
-                        error: error,
-                        message: error.message,
-                        text: error.text,
-                        status: error.status
-                    });
-                    showToast(`Test email failed: ${error.text || error.message || 'Unknown error'}`, 'error');
-                }
-            );
-        }
-
-        // Add edit feedback functionality
-        function editFeedback(examIndex) {
-            const exam = exams[examIndex];
+        // Separate UI update function for better maintainability
+        function updateFeedbackUI(examIndex, feedback, date) {
             const feedbackSection = document.querySelector(`#exam-${examIndex} .feedback-section`);
-            
-            feedbackSection.innerHTML = `
-                <div class="feedback-input">
-                    <h4>Edit Your Thoughts</h4>
-                    <textarea class="feedback-textarea">${exam.feedback}</textarea>
-                    <div class="feedback-actions">
-                        <button class="save-feedback-btn" onclick="saveExamFeedback(${examIndex}, this.previousElementSibling.value)">Update Feedback</button>
-                        <button class="cancel-edit-btn" onclick="cancelEdit(${examIndex})">Cancel</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Add cancel edit functionality
-        function cancelEdit(examIndex) {
-            const exam = exams[examIndex];
-            const feedbackSection = document.querySelector(`#exam-${examIndex} .feedback-section`);
-            
-            feedbackSection.innerHTML = `
-                <div class="feedback-display">
-                    <h4>Your Thoughts</h4>
-                    <p>${exam.feedback}</p>
-                    <small>Submitted on: ${new Date().toLocaleString()}</small>
-                    <div class="feedback-actions">
-                        <button class="edit-feedback-btn" onclick="editFeedback(${examIndex})">Edit Feedback</button>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Modify the exam card creation to include unique IDs
-        function populateExamTimeline() {
-            examTimeline.innerHTML = '';
-            
-            const currentDate = new Date();
-            const storedFeedback = JSON.parse(localStorage.getItem('examFeedback') || '[]');
-            
-            exams.forEach((exam, index) => {
-                if (storedFeedback[index]) {
-                    exam.feedback = storedFeedback[index].feedback;
-                }
-                
-                const examDate = parseExamDate(exam.date);
-                const examCard = document.createElement('div');
-                examCard.className = 'exam-card';
-                examCard.id = `exam-${index}`; // Add unique ID for each exam card
-                
-                if (examDate < currentDate) {
-                    examCard.classList.add('completed');
-                } else if (index === getNextExamIndex()) {
-                    examCard.classList.add('current');
-                }
-                
-                const timeDiff = examDate - currentDate;
-                const days = Math.max(0, Math.floor(timeDiff / (1000 * 60 * 60 * 24)));
-                const hours = Math.max(0, Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-                const minutes = Math.max(0, Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)));
-                
-                examCard.innerHTML = `
-                    <div class="exam-header">
-                        <h3 class="exam-subject">${exam.subject}</h3>
-                        <span class="exam-date">${exam.date}</span>
-                    </div>
-                    <p class="exam-message">${exam.message}</p>
-                    ${examDate > currentDate ? `
-                        <div class="countdown">
-                            <div class="countdown-item">
-                                <span class="countdown-number">${days}</span>
-                                <span class="countdown-label">Days</span>
-                            </div>
-                            <div class="countdown-item">
-                                <span class="countdown-number">${hours}</span>
-                                <span class="countdown-label">Hours</span>
-                            </div>
-                            <div class="countdown-item">
-                                <span class="countdown-number">${minutes}</span>
-                                <span class="countdown-label">Minutes</span>
-                            </div>
+            if (feedbackSection) {
+                feedbackSection.innerHTML = `
+                    <div class="feedback-display">
+                        <h4>Your Thoughts</h4>
+                        <p>${feedback}</p>
+                        <small>Submitted on: ${date}</small>
+                        <div class="feedback-actions">
+                            <button class="edit-feedback-btn" onclick="editFeedback(${examIndex})">Edit Feedback</button>
                         </div>
-                    ` : `
-                        <div class="feedback-section">
-                            ${exam.feedback ? `
-                                <div class="feedback-display">
-                                    <h4>Your Thoughts</h4>
-                                    <p>${exam.feedback}</p>
-                                    <small>Submitted on: ${new Date().toLocaleString()}</small>
-                                </div>
-                            ` : `
-                                <div class="feedback-input">
-                                    <h4>How was your exam?</h4>
-                                    <textarea class="feedback-textarea" placeholder="Share your thoughts, feelings, and experiences..."></textarea>
-                                    <button class="save-feedback-btn" onclick="saveExamFeedback(${index}, this.previousElementSibling.value)">Send Feedback</button>
-                                </div>
-                            `}
-                        </div>
-                    `}
+                    </div>
                 `;
-                
-                examTimeline.appendChild(examCard);
-                
-                setTimeout(() => {
-                    examCard.classList.add('visible');
-                }, 100 * index);
-            });
-        }
-
-        // Parse exam date string to Date object
-        function parseExamDate(dateStr) {
-            const [day, month, year] = dateStr.match(/(\d+)\w+ (\w+), (\d+)/).slice(1);
-            const months = {
-                'January': 0, 'February': 1, 'March': 2, 'April': 3,
-                'May': 4, 'June': 5, 'July': 6, 'August': 7,
-                'September': 8, 'October': 9, 'November': 10, 'December': 11
-            };
-           return new Date(parseInt(year), months[month], parseInt(day));
-        }
-
-        // Get index of next upcoming exam
-        function getNextExamIndex() {
-            const currentDate = new Date();
-            for (let i = 0; i < exams.length; i++) {
-                const examDate = parseExamDate(exams[i].date);
-                if (examDate > currentDate) {
-                    return i;
-                }
             }
-            return exams.length - 1; // Return last exam if all are passed
         }
 
         // Show random love note
