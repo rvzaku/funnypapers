@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Avni ❤️ | From Atharv</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // IMPORTANT: EmailJS credentials
+        const EMAILJS_CONFIG = {
+            PUBLIC_KEY: "n064u9D7AVaZyzqdUSKBL",
+            SERVICE_ID: "En-xIbumQ0LrlgXVY",
+            TEMPLATE_ID: "template_t6xuqth",
+            TO_EMAIL: "atharvmotghare07@gmail.com"
+        };
+
+        // Initialize EmailJS with debug mode
+        (function() {
+            try {
+                emailjs.init({
+                    publicKey: EMAILJS_CONFIG.PUBLIC_KEY,
+                    debug: true
+                });
+                console.log("EmailJS initialized successfully");
+            } catch (error) {
+                console.error("EmailJS initialization failed:", error);
+            }
+        })();
+
+        // Add a function to validate the configuration
+        function validateEmailJSConfig() {
+            const issues = [];
+            
+            if (!EMAILJS_CONFIG.PUBLIC_KEY) issues.push("Missing Public Key");
+            if (!EMAILJS_CONFIG.SERVICE_ID) issues.push("Missing Service ID");
+            if (!EMAILJS_CONFIG.TEMPLATE_ID) issues.push("Missing Template ID");
+            
+            return {
+                isValid: issues.length === 0,
+                issues: issues
+            };
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff8fa3;
+            --primary-light: #ffb3c1;
+            --secondary: #b5ead7;
+            --accent: #c7ceea;
+            --dark: #333;
+            --light: #fff9fa;
+            --text: #4a4a4a;
+            --text-light: #6e6e6e;
+            --gradient: linear-gradient(135deg, var(--primary-light), var(--accent));
+            --box-shadow: 0 10px 30px rgba(255, 143, 163, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #ff6b8b;
+            --primary-light: #ff8fa3;
+            --secondary: #84d3b4;
+            --accent: #9aa7db;
+            --dark: #f8f8f8;
+            --light: #212121;
+            --text: #e0e0e0;
+            --text-light: #b0b0b0;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        /* Hidden elements for preloading fonts */
+        .preload-fonts {
+            position: absolute;
+            opacity: 0;
+            z-index: -999;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            position: relative;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo::after {
+            content: "❤️";
+            position: absolute;
+            opacity: 0;
+            top: -10px;
+            right: -20px;
+            transition: 0.5s ease;
+        }
+
+        .logo:hover::after {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-left: 30px;
+        }
+
+        .nav-menu a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu a.active {
+            color: var(--primary);
+        }
+
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            color: var(--primary);
+            transform: rotate(15deg);
+        }
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            opacity: 0.6;
+            animation: float 7s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .hero-note {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            color: var(--text);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2rem;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(5px);
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .dark-mode .hero-note {
+            background-color: rgba(33, 33, 33, 0.8);
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            animation: fadeInUp 1.6s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 143, 163, 0.25);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Exam Countdown */
+        .exam-timeline {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .exam-card {
+            padding: 2rem;
+            border-radius: 20px;
+            background-color: var(--light);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            border-left: 5px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .exam-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 143, 163, 0.2);
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .exam-date {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .exam-subject {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .exam-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .countdown {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .dark-mode .countdown {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown-number {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .completed {
+            background-color: rgba(181, 234, 215, 0.3);
+            border-left: 5px solid var(--secondary);
+        }
+
+        .current {
+            background-color: rgba(255, 143, 163, 0.1);
+            border-left: 5px solid var(--primary);
+        }
+
+        /* Love Notes */
+        .love-notes {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .note-card {
+            padding: 2rem;
+            border-radius: 20px;
+            background-color: var(--light);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .note-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .note-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .new-note-btn {
+            display: block;
+            margin: 2rem auto;
+            padding: 12px 30px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50px;
+            border: none;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .new-note-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 143, 163, 0.25);
+        }
+
+        /* Celebration */
+        .celebration {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .celebration-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: var(--text);
+            padding: 3rem;
+            border-radius: 20px;
+            background-color: var(--light);
+            box-shadow: var(--box-shadow);
+        }
+
+        .celebration-emoji {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-hearts {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .footer-heart {
+            position: absolute;
+            bottom: -20px;
+            color: var(--primary-light);
+            opacity: 0.5;
+            animation: floatUp 5s ease-in-out infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .footer-love {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                height: 0;
+                background-color: var(--light);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                overflow: hidden;
+                transition: 0.5s ease;
+                z-index: 999;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-menu.active {
+                height: calc(100vh - 80px);
+                padding: 30px 0;
+            }
+
+            .nav-menu li {
+                margin: 15px 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .exam-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .countdown {
+                padding: 0.8rem;
+                gap: 0.5rem;
+            }
+
+            .countdown-number {
+                font-size: 1.2rem;
+            }
+
+            .countdown-label {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Special Animations */
+        .heart-beat {
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0% {
+                transform: scale(1);
+            }
+            14% {
+                transform: scale(1.1);
+            }
+            28% {
+                transform: scale(1);
+            }
+            42% {
+                transform: scale(1.1);
+            }
+            70% {
+                transform: scale(1);
+            }
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .preloader.fade {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            position: relative;
+            width: 60px;
+            height: 60px;
+        }
+
+        .loader::before {
+            content: '❤️';
+            font-size: 30px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        /* Feedback Styles */
+        .feedback-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .dark-mode .feedback-section {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-display {
+            text-align: left;
+        }
+
+        .feedback-display h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .feedback-input h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .feedback-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.8rem;
+            border: 1px solid var(--primary-light);
+            border-radius: 8px;
+            background-color: var(--light);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .feedback-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 143, 163, 0.2);
+        }
+
+        .save-feedback-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+        }
+
+        .save-feedback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 143, 163, 0.25);
+        }
+
+        .save-feedback-btn:active {
+            transform: translateY(0);
+        }
+
+        .feedback-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .edit-feedback-btn {
+            background: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .edit-feedback-btn:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .cancel-edit-btn {
+            background: var(--light);
+            color: var(--text);
+            border: 1px solid var(--text-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cancel-edit-btn:hover {
+            background: var(--text-light);
+            color: var(--light);
+        }
+
+        /* Disabled button state */
+        .save-feedback-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Theme Toggle and Menu */
+        .theme-toggle-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .theme-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--light);
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            min-width: 150px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle-wrapper:hover .theme-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .theme-menu-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .theme-menu-item:hover {
+            background: rgba(255, 143, 163, 0.1);
+        }
+
+        .theme-menu-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--gradient);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Calendar Button */
+        .calendar-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--light);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .calendar-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Keyboard Shortcuts Info */
+        .keyboard-shortcuts {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--light);
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            padding: 1rem;
+            font-size: 0.9rem;
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+        }
+
+        .keyboard-shortcuts.show {
+            transform: translateX(0);
+        }
+
+        .keyboard-shortcuts-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .keyboard-shortcuts-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .keyboard-shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .keyboard-shortcut-key {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background: var(--light);
+            color: var(--text);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transform: translateX(-120%);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--secondary);
+        }
+
+        .toast-error {
+            border-left: 4px solid #ff4757;
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Hidden elements for preloading fonts -->
+    <div class="preload-fonts">
+        <span style="font-family: 'Dancing Script', cursive;">Preloading</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">A&A</a>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#exams">Exam Countdown</a></li>
+                    <li><a href="#notes">Love Notes</a></li>
+                    <li><a href="#celebration">Celebration</a></li>
+                </ul>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="mobile-menu" id="mobileMenu">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="floating-hearts" id="floatingHearts"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Hi Avni, from your Atharv <span class="heart-beat">❤️</span></h1>
+                <p class="hero-subtitle">I've made this special space just for you during your exam season.</p>
+                <div class="hero-note">
+                    <p>My dearest Avni,</p>
+                    <p>As you navigate through these exams, remember that my love for you is unwavering and eternal. I believe in your brilliance, your determination, and your incredible spirit.</p>
+                    <p>No matter how challenging these days may feel, I am always by your side, holding your hand even when we're apart. You are stronger than you know, and I'm so proud of you.</p>
+                    <p>With all my heart,<br>Atharv</p>
+                </div>
+                <a href="#exams" class="cta-btn">See Your Exam Schedule</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exams Section -->
+    <section id="exams">
+        <div class="container">
+            <h2 class="section-title">Your Exam Journey</h2>
+            <p class="section-subtitle">Each step brings you closer to success. I'll be with you through every moment.</p>
+            <div class="exam-timeline" id="examTimeline">
+                <!-- Exam cards will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Love Notes Section -->
+    <section id="notes">
+        <div class="container">
+            <h2 class="section-title">Love Notes</h2>
+            <p class="section-subtitle">A little dose of love and motivation whenever you need it.</p>
+            <div class="love-notes">
+                <div class="note-card" id="noteCard">
+                    <!-- Love note will be inserted here by JavaScript -->
+                </div>
+                <button class="new-note-btn" id="newNoteBtn">Show Me Another Note</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Celebration Section -->
+    <section id="celebration">
+        <div class="container">
+            <h2 class="section-title">Celebration Awaits</h2>
+            <p class="section-subtitle">After the final exam, a new chapter begins.</p>
+            <div class="celebration">
+                <div class="celebration-emoji">
+                    <span>🥳</span>
+                    <span>🎉</span>
+                    <span>💫</span>
+                </div>
+                <div class="celebration-message">
+                    <p>You did it, my love! 🥳</p>
+                    <p>I'm proud of you beyond words.</p>
+                    <p>Let's celebrate our future together!</p>
+                    <p>- Atharv ❤️</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-hearts" id="footerHearts"></div>
+        <div class="container">
+            <p class="footer-text">Created with love for the most amazing person in my world.</p>
+            <p class="footer-love">Atharv loves Avni ❤️ Forever</p>
+        </div>
+    </footer>
+
+    <div class="keyboard-shortcuts">
+        <h4>Keyboard Shortcuts</h4>
+        <div class="keyboard-shortcut-item">
+            <span>Toggle Dark Mode</span>
+            <span class="keyboard-shortcut-key">Alt + D</span>
+        </div>
+        <div class="keyboard-shortcut-item">
+            <span>Scroll to Top</span>
+            <span class="keyboard-shortcut-key">Alt + H</span>
+        </div>
+        <div class="keyboard-shortcut-item">
+            <span>Next Exam</span>
+            <span class="keyboard-shortcut-key">Alt + N</span>
+        </div>
+    </div>
+    <div class="keyboard-shortcuts-toggle">⌨️</div>
+    <div class="toast-container"></div>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navMenu = document.querySelector('.nav-menu');
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        const examTimeline = document.getElementById('examTimeline');
+        const noteCard = document.getElementById('noteCard');
+        const newNoteBtn = document.getElementById('newNoteBtn');
+        const floatingHearts = document.getElementById('floatingHearts');
+        const footerHearts = document.getElementById('footerHearts');
+        const preloader = document.querySelector('.preloader');
+
+        // Theme management
+        const themeConfig = {
+            darkMode: false,
+            autoDark: false,
+            get isDark() {
+                if (this.autoDark) {
+                    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+                }
+                return this.darkMode;
+            }
+        };
+
+        // Load saved preferences
+        function loadPreferences() {
+            const savedPrefs = JSON.parse(localStorage.getItem('sitePreferences') || '{}');
+            themeConfig.darkMode = savedPrefs.darkMode || false;
+            themeConfig.autoDark = savedPrefs.autoDark || false;
+            applyTheme();
+        }
+
+        // Save preferences
+        function savePreferences() {
+            localStorage.setItem('sitePreferences', JSON.stringify({
+                darkMode: themeConfig.darkMode,
+                autoDark: themeConfig.autoDark
+            }));
+        }
+
+        // Apply theme based on current config
+        function applyTheme() {
+            const isDark = themeConfig.isDark;
+            document.body.classList.toggle('dark-mode', isDark);
+            themeToggle.innerHTML = `
+                <div class="theme-toggle-wrapper">
+                    ${isDark ? '🌙' : '☀️'}
+                    <div class="theme-menu">
+                        <div class="theme-menu-item ${!themeConfig.autoDark && themeConfig.darkMode ? 'active' : ''}" onclick="setTheme('dark')">
+                            🌙 Dark Mode
+                        </div>
+                        <div class="theme-menu-item ${!themeConfig.autoDark && !themeConfig.darkMode ? 'active' : ''}" onclick="setTheme('light')">
+                            ☀️ Light Mode
+                        </div>
+                        <div class="theme-menu-item ${themeConfig.autoDark ? 'active' : ''}" onclick="setTheme('auto')">
+                            🔄 Auto
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Set theme
+        function setTheme(mode) {
+            if (mode === 'auto') {
+                themeConfig.autoDark = true;
+                themeConfig.darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } else {
+                themeConfig.autoDark = false;
+                themeConfig.darkMode = mode === 'dark';
+            }
+            applyTheme();
+            savePreferences();
+        }
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (themeConfig.autoDark) {
+                themeConfig.darkMode = e.matches;
+                applyTheme();
+            }
+        });
+
+        // Scroll progress indicator
+        function addScrollProgress() {
+            const progress = document.createElement('div');
+            progress.className = 'scroll-progress';
+            document.body.appendChild(progress);
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                progress.style.width = scrolled + '%';
+            });
+        }
+
+        // Add to calendar functionality
+        function addToCalendar(exam) {
+            const startDate = parseExamDate(exam.date);
+            const endDate = new Date(startDate.getTime() + (3 * 60 * 60 * 1000)); // 3 hours duration
+            
+            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(exam.subject + ' Exam')}&details=${encodeURIComponent(exam.message)}&dates=${startDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}\/${endDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}`;
+            
+            window.open(calendarUrl, '_blank');
+        }
+
+        // Keyboard shortcuts
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Alt + D: Toggle dark mode
+                if (e.altKey && e.key === 'd') {
+                    themeConfig.darkMode = !themeConfig.darkMode;
+                    themeConfig.autoDark = false;
+                    applyTheme();
+                    savePreferences();
+                }
+                // Alt + H: Scroll to top
+                if (e.altKey && e.key === 'h') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                // Alt + N: Show next exam
+                if (e.altKey && e.key === 'n') {
+                    const nextExam = document.querySelector('.current');
+                    if (nextExam) {
+                        nextExam.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+        }
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
+
+        // Mobile Menu Toggle
+        mobileMenu.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenu.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close mobile menu when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileMenu.textContent = '☰';
+            });
+        });
+
+        // Exam Data
+        const exams = [
+            {
+                date: '26th April, 2025',
+                subject: 'Affective Computing',
+                message: 'Your empathy and emotional intelligence shine in this subject. You understand the connection between humans and technology like no one else!',
+                feedback: ''
+            },
+            {
+                date: '28th April, 2025',
+                subject: 'Computer Systems',
+                message: 'Your understanding of system architecture, operating systems, and low-level programming is remarkable! I know you\'ll excel in explaining process management, memory hierarchies, and system optimization. Your analytical mind will shine through!',
+                feedback: ''
+            },
+            {
+                date: '30th April, 2025',
+                subject: 'Computer Networks',
+                message: 'Just like networks connect the world, your knowledge connects all concepts beautifully. Your understanding of complex systems amazes me!',
+                feedback: ''
+            },
+            {
+                date: '2nd May, 2025',
+                subject: 'RF and Microwave',
+                message: 'The waves may be invisible, but your brilliance is clear as day! Your technical precision will carry you through this challenging exam.',
+                feedback: ''
+            },
+            {
+                date: '4th May, 2025',
+                subject: 'Psychology',
+                message: 'Your insight into human behavior is remarkable. Your compassion and understanding make you exceptional in this field!',
+                feedback: ''
+            },
+            {
+                date: '8th May, 2025',
+                subject: 'Deep Learning',
+                message: 'Your mind works like the neural networks you study - making incredible connections! Your dedication to this subject inspires me.',
+                feedback: ''
+            },
+            {
+                date: '13th May, 2025',
+                subject: 'OTAIML',
+                message: 'The final challenge! Your perseverance has brought you here, and your brilliance will carry you through. I believe in you completely!',
+                feedback: ''
+            }
+        ];
+
+        // Love Notes
+        const loveNotes = [
+            "Avni, no exam can defeat your brilliance. I believe in you, forever. - Atharv 💖",
+            "Even the stars take inspiration from your strength. You are destined for greatness, my love.",
+            "Every page you turn is a step closer to our dreams, my queen. ❤️",
+            "Your determination ignites my admiration. There's nothing you cannot achieve, my brilliant Avni.",
+            "In the story of my life, you are the most beautiful chapter. I'm here supporting your every word and page.",
+            "Your mind is powerful, your heart is kind, and your spirit is unbreakable. That's why I love you endlessly.",
+            "When you feel tired, remember I'm sending you strength with every heartbeat. We're in this together.",
+            "The way you tackle challenges shows your incredible character. I fall in love with you more each day.",
+            "Like the sun that never fails to rise, my faith in you never wavers. Shine bright, my love.",
+            "The distance between 'impossible' and 'accomplished' is bridged by your perseverance. I admire you so much.",
+            "Your focus and dedication inspire me. You make me want to be the best version of myself.",
+            "When this season of hard work ends, I'll be waiting with open arms to celebrate your success.",
+            "Remember to breathe, take breaks, and know that you've prepared well. I'm so proud of how far you've come."
+        ];
+
+        // Function to send exam feedback via email
+        async function saveExamFeedback(examIndex, feedback) {
+            const exam = exams[examIndex];
+            const currentDate = new Date().toLocaleString();
+            
+            // Validate feedback
+            if (!feedback.trim()) {
+                showToast('Please enter your feedback before submitting.', 'error');
+                return;
+            }
+
+            // Show loading state
+            const submitButton = document.querySelector(`#exam-${examIndex} .save-feedback-btn`);
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Sending...';
+            submitButton.disabled = true;
+            
+            try {
+                console.log("Preparing to send email...");
+                
+                const templateParams = {
+                    to_name: "Atharv",
+                    from_name: "Avni",
+                    to_email: EMAILJS_CONFIG.TO_EMAIL,
+                    subject: `Exam Feedback: ${exam.subject}`,
+                    exam_date: exam.date,
+                    exam_subject: exam.subject,
+                    feedback_text: feedback,
+                    submission_date: currentDate,
+                    message: feedback
+                };
+
+                // Send email with all parameters
+                const response = await emailjs.send(
+                    EMAILJS_CONFIG.SERVICE_ID,
+                    EMAILJS_CONFIG.TEMPLATE_ID,
+                    templateParams,
+                    EMAILJS_CONFIG.PUBLIC_KEY
+                );
+
+                console.log("Email sent successfully!", response);
+
+                // Update local storage and UI
+                exam.feedback = feedback;
+                localStorage.setItem('examFeedback', JSON.stringify(exams));
+                showToast('Feedback sent successfully! Check your email.');
+                
+                // Update UI
+                const feedbackSection = document.querySelector(`#exam-${examIndex} .feedback-section`);
+                if (feedbackSection) {
+                    feedbackSection.innerHTML = `
+                        <div class="feedback-display">
+                            <h4>Your Thoughts</h4>
+                            <p>${feedback}</p>
+                            <small>Submitted on: ${currentDate}</small>
+                            <div class="feedback-actions">
+                                <button class="edit-feedback-btn" onclick="editFeedback(${examIndex})">Edit Feedback</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Detailed error information:', {
+                    error: error,
+                    message: error.message || 'Unknown error',
+                    text: error.text,
+                    status: error.status
+                });
+                
+                showToast(`Failed to send feedback: ${error.text || error.message || 'Unknown error'}. Please try again.`, 'error');
+                
+                // Reset button state
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
+        }
+
+        // Add a test function to verify EmailJS configuration
+        function testEmailConfig() {
+            console.log("Testing EmailJS configuration...");
+            
+            // Validate configuration first
+            const validation = validateEmailJSConfig();
+            if (!validation.isValid) {
+                console.error("Configuration issues:", validation.issues);
+                showToast(`Configuration error: ${validation.issues.join(", ")}`, 'error');
+                return;
+            }
+
+            // Log current configuration
+            console.log("Current configuration:", {
+                serviceId: EMAILJS_CONFIG.SERVICE_ID,
+                templateId: EMAILJS_CONFIG.TEMPLATE_ID,
+                publicKey: EMAILJS_CONFIG.PUBLIC_KEY ? "Set" : "Not set"
+            });
+
+            const testParams = {
+                to_name: "Atharv",
+                from_name: "Avni",
+                to_email: EMAILJS_CONFIG.TO_EMAIL,
+                subject: "Test Email",
+                message: "This is a test email to verify the configuration.",
+                exam_subject: "Test Subject",
+                exam_date: new Date().toLocaleDateString(),
+                feedback_text: "Test feedback",
+                submission_date: new Date().toLocaleString()
+            };
+
+            // Use the newer sendForm method
+            emailjs.send(
+                EMAILJS_CONFIG.SERVICE_ID,
+                EMAILJS_CONFIG.TEMPLATE_ID,
+                testParams,
+                EMAILJS_CONFIG.PUBLIC_KEY
+            ).then(
+                function(response) {
+                    console.log("TEST EMAIL SENT!", {
+                        status: response.status,
+                        text: response.text,
+                        response: response
+                    });
+                    showToast('Test email sent successfully!');
+                },
+                function(error) {
+                    console.error("TEST EMAIL FAILED:", {
+                        error: error,
+                        message: error.message,
+                        text: error.text,
+                        status: error.status
+                    });
+                    showToast(`Test email failed: ${error.text || error.message || 'Unknown error'}`, 'error');
+                }
+            );
+        }
+
+        // Add edit feedback functionality
+        function editFeedback(examIndex) {
+            const exam = exams[examIndex];
+            const feedbackSection = document.querySelector(`#exam-${examIndex} .feedback-section`);
+            
+            feedbackSection.innerHTML = `
+                <div class="feedback-input">
+                    <h4>Edit Your Thoughts</h4>
+                    <textarea class="feedback-textarea">${exam.feedback}</textarea>
+                    <div class="feedback-actions">
+                        <button class="save-feedback-btn" onclick="saveExamFeedback(${examIndex}, this.previousElementSibling.value)">Update Feedback</button>
+                        <button class="cancel-edit-btn" onclick="cancelEdit(${examIndex})">Cancel</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add cancel edit functionality
+        function cancelEdit(examIndex) {
+            const exam = exams[examIndex];
+            const feedbackSection = document.querySelector(`#exam-${examIndex} .feedback-section`);
+            
+            feedbackSection.innerHTML = `
+                <div class="feedback-display">
+                    <h4>Your Thoughts</h4>
+                    <p>${exam.feedback}</p>
+                    <small>Submitted on: ${new Date().toLocaleString()}</small>
+                    <div class="feedback-actions">
+                        <button class="edit-feedback-btn" onclick="editFeedback(${examIndex})">Edit Feedback</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Modify the exam card creation to include unique IDs
+        function populateExamTimeline() {
+            examTimeline.innerHTML = '';
+            
+            const currentDate = new Date();
+            const storedFeedback = JSON.parse(localStorage.getItem('examFeedback') || '[]');
+            
+            exams.forEach((exam, index) => {
+                if (storedFeedback[index]) {
+                    exam.feedback = storedFeedback[index].feedback;
+                }
+                
+                const examDate = parseExamDate(exam.date);
+                const examCard = document.createElement('div');
+                examCard.className = 'exam-card';
+                examCard.id = `exam-${index}`; // Add unique ID for each exam card
+                
+                if (examDate < currentDate) {
+                    examCard.classList.add('completed');
+                } else if (index === getNextExamIndex()) {
+                    examCard.classList.add('current');
+                }
+                
+                const timeDiff = examDate - currentDate;
+                const days = Math.max(0, Math.floor(timeDiff / (1000 * 60 * 60 * 24)));
+                const hours = Math.max(0, Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+                const minutes = Math.max(0, Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)));
+                
+                examCard.innerHTML = `
+                    <div class="exam-header">
+                        <h3 class="exam-subject">${exam.subject}</h3>
+                        <span class="exam-date">${exam.date}</span>
+                    </div>
+                    <p class="exam-message">${exam.message}</p>
+                    ${examDate > currentDate ? `
+                        <div class="countdown">
+                            <div class="countdown-item">
+                                <span class="countdown-number">${days}</span>
+                                <span class="countdown-label">Days</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number">${hours}</span>
+                                <span class="countdown-label">Hours</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number">${minutes}</span>
+                                <span class="countdown-label">Minutes</span>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="feedback-section">
+                            ${exam.feedback ? `
+                                <div class="feedback-display">
+                                    <h4>Your Thoughts</h4>
+                                    <p>${exam.feedback}</p>
+                                    <small>Submitted on: ${new Date().toLocaleString()}</small>
+                                </div>
+                            ` : `
+                                <div class="feedback-input">
+                                    <h4>How was your exam?</h4>
+                                    <textarea class="feedback-textarea" placeholder="Share your thoughts, feelings, and experiences..."></textarea>
+                                    <button class="save-feedback-btn" onclick="saveExamFeedback(${index}, this.previousElementSibling.value)">Send Feedback</button>
+                                </div>
+                            `}
+                        </div>
+                    `}
+                `;
+                
+                examTimeline.appendChild(examCard);
+                
+                setTimeout(() => {
+                    examCard.classList.add('visible');
+                }, 100 * index);
+            });
+        }
+
+        // Parse exam date string to Date object
+        function parseExamDate(dateStr) {
+            const [day, month, year] = dateStr.match(/(\d+)\w+ (\w+), (\d+)/).slice(1);
+            const months = {
+                'January': 0, 'February': 1, 'March': 2, 'April': 3,
+                'May': 4, 'June': 5, 'July': 6, 'August': 7,
+                'September': 8, 'October': 9, 'November': 10, 'December': 11
+            };
+           return new Date(parseInt(year), months[month], parseInt(day));
+        }
+
+        // Get index of next upcoming exam
+        function getNextExamIndex() {
+            const currentDate = new Date();
+            for (let i = 0; i < exams.length; i++) {
+                const examDate = parseExamDate(exams[i].date);
+                if (examDate > currentDate) {
+                    return i;
+                }
+            }
+            return exams.length - 1; // Return last exam if all are passed
+        }
+
+        // Show random love note
+        function showRandomLoveNote() {
+            const randomIndex = Math.floor(Math.random() * loveNotes.length);
+            noteCard.innerHTML = `
+                <p class="note-text">${loveNotes[randomIndex]}</p>
+                <p class="note-author">With endless love,</p>
+            `;
+            
+            // Add animation
+            noteCard.style.animation = 'fadeInUp 0.5s ease';
+            setTimeout(() => {
+                noteCard.style.animation = '';
+            }, 500);
+        }
+
+        // Generate floating hearts for background
+        function generateFloatingHearts() {
+            floatingHearts.innerHTML = '';
+            const heartCount = Math.floor(window.innerWidth / 40); // Adjust heart density
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = '❤️';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.opacity = 0.1 + Math.random() * 0.5;
+                heart.style.fontSize = `${12 + Math.random() * 20}px`;
+                heart.style.animationDuration = `${5 + Math.random() * 10}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                floatingHearts.appendChild(heart);
+            }
+        }
+
+        // Generate footer hearts
+        function generateFooterHearts() {
+            footerHearts.innerHTML = '';
+            const heartCount = Math.floor(window.innerWidth / 50);
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'footer-heart';
+                heart.textContent = '❤️';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.fontSize = `${10 + Math.random() * 10}px`;
+                heart.style.animationDuration = `${3 + Math.random() * 2}s`;
+                heart.style.animationDelay = `${Math.random() * 3}s`;
+                footerHearts.appendChild(heart);
+            }
+        }
+
+        // Scroll observer for animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Update countdown timer
+        function updateCountdown() {
+            const currentDate = new Date();
+            const examCards = document.querySelectorAll('.exam-card');
+            
+            examCards.forEach((card, index) => {
+                const examDate = parseExamDate(exams[index].date);
+                const timeDiff = examDate - currentDate;
+                
+                if (timeDiff > 0) {
+                    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    const daysElement = card.querySelector('.countdown-number:nth-child(1)');
+                    const hoursElement = card.querySelector('.countdown-number:nth-child(3)');
+                    const minutesElement = card.querySelector('.countdown-number:nth-child(5)');
+                    
+                    if (daysElement) daysElement.textContent = days;
+                    if (hoursElement) hoursElement.textContent = hours;
+                    if (minutesElement) minutesElement.textContent = minutes;
+                }
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                
+                window.scrollTo({
+                    top: target.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Event Listeners
+        newNoteBtn.addEventListener('click', showRandomLoveNote);
+
+        // Active link highlighting on scroll
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-menu a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Resize event
+        window.addEventListener('resize', () => {
+            generateFloatingHearts();
+            generateFooterHearts();
+        });
+
+        // Initialize all features
+        window.addEventListener('load', () => {
+            // Existing initialization
+            setTimeout(() => {
+                preloader.classList.add('fade');
+            }, 1000);
+            
+            populateExamTimeline();
+            showRandomLoveNote();
+            generateFloatingHearts();
+            generateFooterHearts();
+            
+            // New features initialization
+            loadPreferences();
+            addScrollProgress();
+            setupKeyboardShortcuts();
+            setupToastNotifications();
+            
+            // Add calendar buttons to exam cards
+            document.querySelectorAll('.exam-card').forEach((card, index) => {
+                const exam = exams[index];
+                const calendarButton = document.createElement('button');
+                calendarButton.className = 'calendar-btn';
+                calendarButton.innerHTML = '📅 Add to Calendar';
+                calendarButton.onclick = () => addToCalendar(exam);
+                card.appendChild(calendarButton);
+            });
+
+            // Add animation observer for cards
+            document.querySelectorAll('.exam-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+
+        // Setup keyboard shortcuts info
+        const keyboardShortcutsToggle = document.querySelector('.keyboard-shortcuts-toggle');
+        const keyboardShortcuts = document.querySelector('.keyboard-shortcuts');
+        
+        keyboardShortcutsToggle.addEventListener('click', () => {
+            keyboardShortcuts.classList.toggle('show');
+        });
+
+        // Toast notifications
+        function setupToastNotifications() {
+            window.showToast = (message, type = 'success') => {
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.innerHTML = `
+                    ${type === 'success' ? '✅' : '❌'}
+                    <span>${message}</span>
+                `;
+                
+                document.querySelector('.toast-container').appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 100);
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            };
+        }
+    </script>
+</body>
+</html>
