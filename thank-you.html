@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You ❤️ | Message Sent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff8fa3;
+            --primary-light: #ffb3c1;
+            --secondary: #b5ead7;
+            --accent: #c7ceea;
+            --dark: #333;
+            --light: #fff9fa;
+            --text: #4a4a4a;
+            --text-light: #6e6e6e;
+            --gradient: linear-gradient(135deg, var(--primary-light), var(--accent));
+            --box-shadow: 0 10px 30px rgba(255, 143, 163, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .thank-you-container {
+            max-width: 600px;
+            padding: 3rem;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: var(--box-shadow);
+            animation: fadeInUp 1s ease;
+        }
+
+        .thank-you-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .thank-you-message {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .heart {
+            font-size: 5rem;
+            color: var(--primary);
+            animation: pulse 1.5s infinite;
+            margin: 1rem 0;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 143, 163, 0.25);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            opacity: 0.3;
+            animation: float 10s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(-50%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) translateX(50%);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="floatingHearts"></div>
+    
+    <div class="thank-you-container">
+        <h1 class="thank-you-title">Message Sent!</h1>
+        <div class="heart">❤️</div>
+        <p class="thank-you-message">Thank you for your message, Avni! I've received it and will read it with a smile on my face. I'll respond as soon as possible.</p>
+        <p class="thank-you-message">Your words mean everything to me.</p>
+        <a href="index.html" class="back-btn">Back to Our Special Place</a>
+    </div>
+
+    <script>
+        // Generate floating hearts
+        const floatingHearts = document.getElementById('floatingHearts');
+        
+        function generateHearts() {
+            floatingHearts.innerHTML = '';
+            const heartCount = Math.floor(window.innerWidth / 40);
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = '❤️';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.fontSize = `${12 + Math.random() * 20}px`;
+                heart.style.animationDuration = `${5 + Math.random() * 10}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                floatingHearts.appendChild(heart);
+            }
+        }
+        
+        generateHearts();
+        window.addEventListener('resize', generateHearts);
+    </script>
+</body>
+</html> 
