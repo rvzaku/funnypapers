@@ -4,6 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For My Avni ❤️ | From Atharv</title>
+    <script type="text/javascript">
+        // Cache DOM elements for better performance
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = {
+                examTimeline: document.getElementById('examTimeline'),
+                noteCard: document.getElementById('noteCard'),
+                newNoteBtn: document.getElementById('newNoteBtn'),
+                themeToggle: document.getElementById('themeToggle'),
+                mobileMenu: document.getElementById('mobileMenu'),
+                navMenu: document.querySelector('.nav-menu'),
+                preloader: document.querySelector('.preloader')
+            };
+
+            // Store elements globally
+            window.appElements = elements;
+        });
+
+        // Optimize performance by debouncing scroll events
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Separate UI update function for better maintainability
+        function updateFeedbackUI(examIndex, feedback, date) {
+            const feedbackSection = document.querySelector(`#exam-${examIndex} .feedback-section`);
+            if (feedbackSection) {
+                feedbackSection.innerHTML = `
+                    <div class="feedback-display">
+                        <h4>Your Thoughts</h4>
+                        <p>${feedback}</p>
+                        <small>Submitted on: ${date}</small>
+                        <div class="feedback-actions">
+                            <button class="edit-feedback-btn" onclick="editFeedback(${examIndex})">Edit Feedback</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Optimize scroll handling
+        const handleScroll = debounce(() => {
+            const scrollPosition = window.scrollY;
+            
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-menu a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, 100);
+
+        // Add optimized event listeners
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('resize', debounce(() => {
+            generateFloatingHearts();
+            generateFooterHearts();
+        }, 100));
+
+        // Load saved preferences immediately
+        loadPreferences();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -35,20 +112,29 @@
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--light);
+            background-color: var(--light);
             color: var(--text);
             transition: var(--transition);
             overflow-x: hidden;
         }
 
+        /* Hidden elements for preloading fonts */
+        .preload-fonts {
+            position: absolute;
+            opacity: 0;
+            z-index: -999;
+            font-family: 'Dancing Script', cursive;
+        }
+
         .container {
+            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
@@ -76,6 +162,20 @@
             display: inline-block;
         }
 
+        .logo::after {
+            content: "❤️";
+            position: absolute;
+            opacity: 0;
+            top: -10px;
+            right: -20px;
+            transition: 0.5s ease;
+        }
+
+        .logo:hover::after {
+            opacity: 1;
+            transform: translateY(-5px);
+        }
+
         .nav-menu {
             display: flex;
             list-style: none;
@@ -94,8 +194,31 @@
             padding: 5px 0;
         }
 
-        .nav-menu a.active, .nav-menu a:hover {
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-menu a:hover {
             color: var(--primary);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu a.active {
+            color: var(--primary);
+        }
+
+        .nav-menu a.active::after {
+            width: 100%;
         }
 
         .theme-toggle {
@@ -121,35 +244,119 @@
             cursor: pointer;
         }
 
-        @media screen and (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                top: 80px;
-                left: 0;
-                width: 100%;
-                height: 0;
-                background: var(--light);
-                flex-direction: column;
-                align-items: center;
-                overflow: hidden;
-                transition: 0.5s;
-                z-index: 999;
-            }
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-            .nav-menu.active {
-                height: calc(100vh - 80px);
-                padding: 30px 0;
-            }
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
 
-            .nav-menu li {
-                margin: 15px 0;
-            }
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
 
-            .mobile-menu {
-                display: block;
+        .heart {
+            position: absolute;
+            opacity: 0.6;
+            animation: float 7s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
             }
         }
 
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .hero-note {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            color: var(--text);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2rem;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: var(--box-shadow);
+            backdrop-filter: blur(5px);
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .dark-mode .hero-note {
+            background-color: rgba(33, 33, 33, 0.8);
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            animation: fadeInUp 1.6s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 143, 163, 0.25);
+        }
+
+        /* Sections */
         section {
             padding: 80px 0;
         }
@@ -172,6 +379,7 @@
             margin-right: auto;
         }
 
+        /* Exam Countdown */
         .exam-timeline {
             max-width: 800px;
             margin: 0 auto;
@@ -180,12 +388,25 @@
         .exam-card {
             padding: 2rem;
             border-radius: 20px;
-            background: var(--light);
+            background-color: var(--light);
             box-shadow: var(--box-shadow);
             margin-bottom: 2rem;
+            transition: var(--transition);
             border-left: 5px solid var(--primary);
             display: flex;
             flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .exam-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 143, 163, 0.2);
         }
 
         .exam-header {
@@ -215,12 +436,16 @@
         }
 
         .countdown {
-            background: rgba(255,255,255,0.2);
+            background-color: rgba(255, 255, 255, 0.2);
             padding: 1rem;
             border-radius: 10px;
             display: flex;
             justify-content: center;
             gap: 1rem;
+        }
+
+        .dark-mode .countdown {
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
         .countdown-item {
@@ -241,15 +466,16 @@
         }
 
         .completed {
-            background: rgba(181,234,215,0.3);
+            background-color: rgba(181, 234, 215, 0.3);
             border-left: 5px solid var(--secondary);
         }
 
         .current {
-            background: rgba(255,143,163,0.1);
+            background-color: rgba(255, 143, 163, 0.1);
             border-left: 5px solid var(--primary);
         }
 
+        /* Love Notes */
         .love-notes {
             max-width: 800px;
             margin: 0 auto;
@@ -259,9 +485,12 @@
         .note-card {
             padding: 2rem;
             border-radius: 20px;
-            background: var(--light);
+            background-color: var(--light);
             box-shadow: var(--box-shadow);
             text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
             margin-bottom: 2rem;
         }
 
@@ -285,6 +514,7 @@
             color: white;
             border-radius: 50px;
             border: none;
+            text-decoration: none;
             font-weight: 600;
             cursor: pointer;
             box-shadow: var(--box-shadow);
@@ -293,139 +523,43 @@
 
         .new-note-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255,143,163,0.25);
+            box-shadow: 0 15px 30px rgba(255, 143, 163, 0.25);
         }
 
-        .feedback-section {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+        /* Celebration */
+        .celebration {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
         }
 
-        .feedback-display h4, .feedback-input h4 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .feedback-textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 0.8rem;
-            border: 1px solid var(--primary-light);
-            border-radius: 8px;
-            background: var(--light);
+        .celebration-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
             color: var(--text);
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
-            resize: vertical;
-            margin-bottom: 1rem;
-            transition: var(--transition);
-        }
-
-        .feedback-textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(255,143,163,0.2);
-        }
-
-        .save-feedback-btn {
-            background: var(--gradient);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
+            padding: 3rem;
+            border-radius: 20px;
+            background-color: var(--light);
             box-shadow: var(--box-shadow);
         }
 
-        .save-feedback-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,143,163,0.25);
-        }
-
-        .save-feedback-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .edit-feedback-btn {
-            background: var(--accent);
-            color: var(--dark);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .edit-feedback-btn:hover {
-            background: var(--primary-light);
-            color: white;
-        }
-
-        .cancel-edit-btn {
-            background: var(--light);
-            color: var(--text);
-            border: 1px solid var(--text-light);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .cancel-edit-btn:hover {
-            background: var(--text-light);
-            color: var(--light);
-        }
-
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1000;
-        }
-
-        .toast {
-            background: var(--light);
-            color: var(--text);
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: var(--box-shadow);
-            margin-top: 0.5rem;
+        .celebration-emoji {
+            font-size: 4rem;
+            margin-bottom: 2rem;
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transform: translateX(-120%);
-            transition: transform 0.3s ease;
+            justify-content: center;
+            gap: 1rem;
         }
 
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast-success {
-            border-left: 4px solid var(--secondary);
-        }
-
-        .toast-error {
-            border-left: 4px solid #ff4757;
-        }
-
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: var(--gradient);
-            z-index: 1000;
-            transition: width 0.1s ease;
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .footer-hearts {
@@ -471,9 +605,444 @@
             font-size: 1.2rem;
             color: var(--primary);
         }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                height: 0;
+                background-color: var(--light);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                overflow: hidden;
+                transition: 0.5s ease;
+                z-index: 999;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-menu.active {
+                height: calc(100vh - 80px);
+                padding: 30px 0;
+            }
+
+            .nav-menu li {
+                margin: 15px 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .exam-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .countdown {
+                padding: 0.8rem;
+                gap: 0.5rem;
+            }
+
+            .countdown-number {
+                font-size: 1.2rem;
+            }
+
+            .countdown-label {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Special Animations */
+        .heart-beat {
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0% {
+                transform: scale(1);
+            }
+            14% {
+                transform: scale(1.1);
+            }
+            28% {
+                transform: scale(1);
+            }
+            42% {
+                transform: scale(1.1);
+            }
+            70% {
+                transform: scale(1);
+            }
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .preloader.fade {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            position: relative;
+            width: 60px;
+            height: 60px;
+        }
+
+        .loader::before {
+            content: '❤️';
+            font-size: 30px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        /* Feedback Styles */
+        .feedback-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .dark-mode .feedback-section {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-display {
+            text-align: left;
+        }
+
+        .feedback-display h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .feedback-input h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .feedback-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 0.8rem;
+            border: 1px solid var(--primary-light);
+            border-radius: 8px;
+            background-color: var(--light);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .feedback-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 143, 163, 0.2);
+        }
+
+        .save-feedback-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+        }
+
+        .save-feedback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 143, 163, 0.25);
+        }
+
+        .save-feedback-btn:active {
+            transform: translateY(0);
+        }
+
+        .feedback-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .edit-feedback-btn {
+            background: var(--accent);
+            color: var(--dark);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .edit-feedback-btn:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .cancel-edit-btn {
+            background: var(--light);
+            color: var(--text);
+            border: 1px solid var(--text-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cancel-edit-btn:hover {
+            background: var(--text-light);
+            color: var(--light);
+        }
+
+        /* Disabled button state */
+        .save-feedback-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Theme Toggle and Menu */
+        .theme-toggle-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .theme-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--light);
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            min-width: 150px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle-wrapper:hover .theme-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .theme-menu-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .theme-menu-item:hover {
+            background: rgba(255, 143, 163, 0.1);
+        }
+
+        .theme-menu-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--gradient);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+
+        /* Calendar Button */
+        .calendar-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--light);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .calendar-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Keyboard Shortcuts Info */
+        .keyboard-shortcuts {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--light);
+            border-radius: 12px;
+            box-shadow: var(--box-shadow);
+            padding: 1rem;
+            font-size: 0.9rem;
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+        }
+
+        .keyboard-shortcuts.show {
+            transform: translateX(0);
+        }
+
+        .keyboard-shortcuts-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .keyboard-shortcuts-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .keyboard-shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .keyboard-shortcut-key {
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background: var(--light);
+            color: var(--text);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transform: translateX(-120%);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--secondary);
+        }
+
+        .toast-error {
+            border-left: 4px solid #ff4757;
+        }
     </style>
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Hidden elements for preloading fonts -->
+    <div class="preload-fonts">
+        <span style="font-family: 'Dancing Script', cursive;">Preloading</span>
+    </div>
+
+    <!-- Header -->
     <header>
         <div class="container">
             <nav>
@@ -484,13 +1053,15 @@
                     <li><a href="#notes">Love Notes</a></li>
                     <li><a href="#celebration">Celebration</a></li>
                 </ul>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
-                <button class="mobile-menu" id="mobileMenu" aria-label="Toggle menu">☰</button>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <button class="mobile-menu" id="mobileMenu">☰</button>
             </nav>
         </div>
     </header>
 
+    <!-- Hero Section -->
     <section class="hero" id="home">
+        <div class="floating-hearts" id="floatingHearts"></div>
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero-title">Hi Avni, from your Atharv <span class="heart-beat">❤️</span></h1>
@@ -506,25 +1077,32 @@
         </div>
     </section>
 
+    <!-- Exams Section -->
     <section id="exams">
         <div class="container">
             <h2 class="section-title">Your Exam Journey</h2>
             <p class="section-subtitle">Each step brings you closer to success. I'll be with you through every moment.</p>
-            <div class="exam-timeline" id="examTimeline"></div>
+            <div class="exam-timeline" id="examTimeline">
+                <!-- Exam cards will be inserted here by JavaScript -->
+            </div>
         </div>
     </section>
 
+    <!-- Love Notes Section -->
     <section id="notes">
         <div class="container">
             <h2 class="section-title">Love Notes</h2>
             <p class="section-subtitle">A little dose of love and motivation whenever you need it.</p>
             <div class="love-notes">
-                <div class="note-card" id="noteCard"></div>
+                <div class="note-card" id="noteCard">
+                    <!-- Love note will be inserted here by JavaScript -->
+                </div>
                 <button class="new-note-btn" id="newNoteBtn">Show Me Another Note</button>
             </div>
         </div>
     </section>
 
+    <!-- Celebration Section -->
     <section id="celebration">
         <div class="container">
             <h2 class="section-title">Celebration Awaits</h2>
@@ -545,6 +1123,7 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <div class="footer-hearts" id="footerHearts"></div>
         <div class="container">
@@ -553,20 +1132,344 @@
         </div>
     </footer>
 
+    <div class="keyboard-shortcuts">
+        <h4>Keyboard Shortcuts</h4>
+        <div class="keyboard-shortcut-item">
+            <span>Toggle Dark Mode</span>
+            <span class="keyboard-shortcut-key">Alt + D</span>
+        </div>
+        <div class="keyboard-shortcut-item">
+            <span>Scroll to Top</span>
+            <span class="keyboard-shortcut-key">Alt + H</span>
+        </div>
+        <div class="keyboard-shortcut-item">
+            <span>Next Exam</span>
+            <span class="keyboard-shortcut-key">Alt + N</span>
+        </div>
+    </div>
+    <div class="keyboard-shortcuts-toggle">⌨️</div>
     <div class="toast-container"></div>
-    <div class="scroll-progress"></div>
 
     <script>
-        // Data
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navMenu = document.querySelector('.nav-menu');
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        const examTimeline = document.getElementById('examTimeline');
+        const noteCard = document.getElementById('noteCard');
+        const newNoteBtn = document.getElementById('newNoteBtn');
+        const floatingHearts = document.getElementById('floatingHearts');
+        const footerHearts = document.getElementById('footerHearts');
+        const preloader = document.querySelector('.preloader');
+
+        // Theme management
+        const themeConfig = {
+            darkMode: false,
+            autoDark: false,
+            get isDark() {
+                if (this.autoDark) {
+                    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+                }
+                return this.darkMode;
+            }
+        };
+
+        // Load saved preferences
+        function loadPreferences() {
+            const savedPrefs = JSON.parse(localStorage.getItem('sitePreferences') || '{}');
+            themeConfig.darkMode = savedPrefs.darkMode || false;
+            themeConfig.autoDark = savedPrefs.autoDark || false;
+            applyTheme();
+        }
+
+        // Save preferences
+        function savePreferences() {
+            localStorage.setItem('sitePreferences', JSON.stringify({
+                darkMode: themeConfig.darkMode,
+                autoDark: themeConfig.autoDark
+            }));
+        }
+
+        // Apply theme based on current config
+        function applyTheme() {
+            const isDark = themeConfig.isDark;
+            document.body.classList.toggle('dark-mode', isDark);
+            themeToggle.innerHTML = `
+                <div class="theme-toggle-wrapper">
+                    ${isDark ? '🌙' : '☀️'}
+                    <div class="theme-menu">
+                        <div class="theme-menu-item ${!themeConfig.autoDark && themeConfig.darkMode ? 'active' : ''}" onclick="setTheme('dark')">
+                            🌙 Dark Mode
+                        </div>
+                        <div class="theme-menu-item ${!themeConfig.autoDark && !themeConfig.darkMode ? 'active' : ''}" onclick="setTheme('light')">
+                            ☀️ Light Mode
+                        </div>
+                        <div class="theme-menu-item ${themeConfig.autoDark ? 'active' : ''}" onclick="setTheme('auto')">
+                            🔄 Auto
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Set theme
+        function setTheme(mode) {
+            if (mode === 'auto') {
+                themeConfig.autoDark = true;
+                themeConfig.darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } else {
+                themeConfig.autoDark = false;
+                themeConfig.darkMode = mode === 'dark';
+            }
+            applyTheme();
+            savePreferences();
+        }
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (themeConfig.autoDark) {
+                themeConfig.darkMode = e.matches;
+                applyTheme();
+            }
+        });
+
+        // Scroll progress indicator
+        function addScrollProgress() {
+            const progress = document.createElement('div');
+            progress.className = 'scroll-progress';
+            document.body.appendChild(progress);
+
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                progress.style.width = scrolled + '%';
+            });
+        }
+
+        // Add to calendar functionality
+        function addToCalendar(exam) {
+            const startDate = parseExamDate(exam.date);
+            const endDate = new Date(startDate.getTime() + (3 * 60 * 60 * 1000)); // 3 hours duration
+            
+            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(exam.subject + ' Exam')}&details=${encodeURIComponent(exam.message)}&dates=${startDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}\/${endDate.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}`;
+            
+            window.open(calendarUrl, '_blank');
+        }
+
+        // Keyboard shortcuts
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Alt + D: Toggle dark mode
+                if (e.altKey && e.key === 'd') {
+                    themeConfig.darkMode = !themeConfig.darkMode;
+                    themeConfig.autoDark = false;
+                    applyTheme();
+                    savePreferences();
+                }
+                // Alt + H: Scroll to top
+                if (e.altKey && e.key === 'h') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                // Alt + N: Show next exam
+                if (e.altKey && e.key === 'n') {
+                    const nextExam = document.querySelector('.current');
+                    if (nextExam) {
+                        nextExam.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+        }
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
+
+        // Mobile Menu Toggle
+        mobileMenu.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenu.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close mobile menu when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileMenu.textContent = '☰';
+            });
+        });
+
+        // Exam Data
         const exams = [
-            { date: '26th April, 2025', subject: 'Affective Computing', message: 'Your empathy and emotional intelligence shine in this subject. You understand the connection between humans and technology like no one else!', feedback: '' },
-            { date: '28th April, 2025', subject: 'Computer Systems', message: "Your understanding of system architecture, operating systems, and low-level programming is remarkable! I know you'll excel in explaining process management, memory hierarchies, and system optimization. Your analytical mind will shine through!", feedback: '' },
-            { date: '30th April, 2025', subject: 'Computer Networks', message: 'Just like networks connect the world, your knowledge connects all concepts beautifully. Your understanding of complex systems amazes me!', feedback: '' },
-            { date: '2nd May, 2025', subject: 'RF and Microwave', message: 'The waves may be invisible, but your brilliance is clear as day! Your technical precision will carry you through this challenging exam.', feedback: '' },
-            { date: '4th May, 2025', subject: 'Psychology', message: 'Your insight into human behavior is remarkable. Your compassion and understanding make you exceptional in this field!', feedback: '' },
-            { date: '8th May, 2025', subject: 'Deep Learning', message: 'Your mind works like the neural networks you study - making incredible connections! Your dedication to this subject inspires me.', feedback: '' },
-            { date: '13th May, 2025', subject: 'OTAIML', message: 'The final challenge! Your perseverance has brought you here, and your brilliance will carry you through. I believe in you completely!', feedback: '' }
+            {
+                date: '26th April, 2025',
+                subject: 'Affective Computing',
+                message: 'Your empathy and emotional intelligence shine in this subject. You understand the connection between humans and technology like no one else!',
+                feedback: ''
+            },
+            {
+                date: '28th April, 2025',
+                subject: 'Computer Systems',
+                message: 'Your understanding of system architecture, operating systems, and low-level programming is remarkable! I know you\'ll excel in explaining process management, memory hierarchies, and system optimization. Your analytical mind will shine through!',
+                feedback: ''
+            },
+            {
+                date: '30th April, 2025',
+                subject: 'Computer Networks',
+                message: 'Just like networks connect the world, your knowledge connects all concepts beautifully. Your understanding of complex systems amazes me!',
+                feedback: ''
+            },
+            {
+                date: '2nd May, 2025',
+                subject: 'RF and Microwave',
+                message: 'The waves may be invisible, but your brilliance is clear as day! Your technical precision will carry you through this challenging exam.',
+                feedback: ''
+            },
+            {
+                date: '4th May, 2025',
+                subject: 'Psychology',
+                message: 'Your insight into human behavior is remarkable. Your compassion and understanding make you exceptional in this field!',
+                feedback: ''
+            },
+            {
+                date: '8th May, 2025',
+                subject: 'Deep Learning',
+                message: 'Your mind works like the neural networks you study - making incredible connections! Your dedication to this subject inspires me.',
+                feedback: ''
+            },
+            {
+                date: '13th May, 2025',
+                subject: 'OTAIML',
+                message: 'The final challenge! Your perseverance has brought you here, and your brilliance will carry you through. I believe in you completely!',
+                feedback: ''
+            }
         ];
+
+        // Parse exam date string to Date object
+        function parseExamDate(dateStr) {
+            const [day, month, year] = dateStr.replace(/[a-z]+/g, '').split(' ');
+            const monthMap = {
+                'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
+                'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+            };
+            return new Date(year, monthMap[month], parseInt(day));
+        }
+
+        // Populate exam timeline
+        function populateExamTimeline() {
+            // Try to load feedback from localStorage
+            const savedFeedback = localStorage.getItem('examFeedback');
+            if (savedFeedback) {
+                const savedExams = JSON.parse(savedFeedback);
+                savedExams.forEach((exam, index) => {
+                    if (exam.feedback) {
+                        exams[index].feedback = exam.feedback;
+                    }
+                });
+            }
+
+            examTimeline.innerHTML = '';
+            const currentDate = new Date();
+            
+            exams.forEach((exam, index) => {
+                const examDate = parseExamDate(exam.date);
+                let statusClass = '';
+                let statusText = '';
+                
+                if (examDate < currentDate) {
+                    statusClass = 'completed';
+                    statusText = 'Completed';
+                } else if (examDate - currentDate < 7 * 24 * 60 * 60 * 1000) {
+                    statusClass = 'current';
+                    statusText = 'Coming Soon';
+                }
+                
+                const card = document.createElement('div');
+                card.className = `exam-card ${statusClass}`;
+                card.id = `exam-${index}`;
+                
+                const timeDiff = examDate - currentDate;
+                let countdownHTML = '';
+                
+                if (timeDiff > 0) {
+                    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    countdownHTML = `
+                        <div class="countdown">
+                            <div class="countdown-item">
+                                <div class="countdown-number">${days}</div>
+                                <div class="countdown-label">Days</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number">:</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number">${hours}</div>
+                                <div class="countdown-label">Hours</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number">:</div>
+                            </div>
+                            <div class="countdown-item">
+                                <div class="countdown-number">${minutes}</div>
+                                <div class="countdown-label">Minutes</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    countdownHTML = `
+                        <div class="countdown completed">
+                            <p>This exam is now complete!</p>
+                        </div>
+                    `;
+                }
+                
+                card.innerHTML = `
+                    <div class="exam-header">
+                        <h3 class="exam-subject">${exam.subject}</h3>
+                        <p class="exam-date">${exam.date}</p>
+                    </div>
+                    <p class="exam-message">${exam.message}</p>
+                    ${countdownHTML}
+                    <div class="feedback-section"></div>
+                `;
+                
+                examTimeline.appendChild(card);
+                
+                // Setup feedback section based on status
+                const feedbackSection = card.querySelector('.feedback-section');
+                
+                if (exam.feedback) {
+                    updateFeedbackUI(index, exam.feedback, "Previously submitted");
+                } else {
+                    feedbackSection.innerHTML = `
+                        <div class="feedback-input">
+                            <h4>Share Your Thoughts</h4>
+                            <form action="https://formsubmit.co/atharvmotghare07@gmail.com" method="POST" class="feedback-form">
+                                <input type="hidden" name="_subject" value="Exam Feedback: ${exam.subject}">
+                                <input type="hidden" name="exam_subject" value="${exam.subject}">
+                                <input type="hidden" name="exam_date" value="${exam.date}">
+                                <input type="hidden" name="_next" value="${window.location.href}#exam-${index}">
+                                <input type="hidden" name="_captcha" value="false">
+                                <textarea name="feedback" class="feedback-textarea" placeholder="How did you feel about this exam? Any thoughts to share..."></textarea>
+                                <button type="submit" class="save-feedback-btn">Send Feedback</button>
+                            </form>
+                        </div>
+                    `;
+                }
+            });
+            
+            // Start countdown update
+            setInterval(updateCountdown, 60000);
+            updateCountdown();
+        }
+
+        // Love Notes
         const loveNotes = [
             "Avni, no exam can defeat your brilliance. I believe in you, forever. - Atharv 💖",
             "Even the stars take inspiration from your strength. You are destined for greatness, my love.",
@@ -583,250 +1486,260 @@
             "Remember to breathe, take breaks, and know that you've prepared well. I'm so proud of how far you've come."
         ];
 
-        // Theme
-        const themeToggle = document.getElementById('themeToggle');
-        const themeConfig = {
-            darkMode: false,
-            autoDark: false,
-            get isDark() {
-                if (this.autoDark) return window.matchMedia('(prefers-color-scheme: dark)').matches;
-                return this.darkMode;
-            }
-        };
-        function loadPreferences() {
-            const saved = JSON.parse(localStorage.getItem('sitePreferences') || '{}');
-            themeConfig.darkMode = saved.darkMode || false;
-            themeConfig.autoDark = saved.autoDark || false;
-            applyTheme();
+        // Show random love note
+        function showRandomLoveNote() {
+            const randomIndex = Math.floor(Math.random() * loveNotes.length);
+            noteCard.innerHTML = `
+                <p class="note-text">${loveNotes[randomIndex]}</p>
+                <p class="note-author">With endless love,</p>
+            `;
+            
+            // Add animation
+            noteCard.style.animation = 'fadeInUp 0.5s ease';
+            setTimeout(() => {
+                noteCard.style.animation = '';
+            }, 500);
         }
-        function savePreferences() {
-            localStorage.setItem('sitePreferences', JSON.stringify({ darkMode: themeConfig.darkMode, autoDark: themeConfig.autoDark }));
-        }
-        function applyTheme() {
-            document.body.classList.toggle('dark-mode', themeConfig.isDark);
-            themeToggle.textContent = themeConfig.isDark ? '☀️' : '🌙';
-        }
-        themeToggle.addEventListener('click', () => {
-            themeConfig.darkMode = !themeConfig.darkMode;
-            themeConfig.autoDark = false;
-            applyTheme();
-            savePreferences();
-        });
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (themeConfig.autoDark) {
-                themeConfig.darkMode = e.matches;
-                applyTheme();
-            }
-        });
 
-        // Mobile menu
-        const mobileMenu = document.getElementById('mobileMenu');
-        const navMenu = document.querySelector('.nav-menu');
-        mobileMenu.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            mobileMenu.textContent = navMenu.classList.contains('active') ? '✕' : '☰';
-        });
-        document.querySelectorAll('.nav-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                mobileMenu.textContent = '☰';
-            });
-        });
-
-        // Exam timeline
-        function parseExamDate(dateStr) {
-            // e.g. '26th April, 2025' => Date
-            return new Date(dateStr.replace(/(st|nd|rd|th)/, ''));
+        // Function to create feedback form for an exam
+        function createFeedbackForm(examIndex) {
+            const exam = exams[examIndex];
+            const feedbackSection = document.querySelector(`#exam-${examIndex} .feedback-section`);
+            
+            if (feedbackSection) {
+                feedbackSection.innerHTML = `
+                    <div class="feedback-input">
+                        <h4>Share Your Thoughts</h4>
+                        <form action="https://formsubmit.co/atharvmotghare07@gmail.com" method="POST" class="feedback-form">
+                            <input type="hidden" name="_subject" value="Exam Feedback: ${exam.subject}">
+                            <input type="hidden" name="exam_subject" value="${exam.subject}">
+                            <input type="hidden" name="exam_date" value="${exam.date}">
+                            <input type="hidden" name="_next" value="${window.location.href}#exam-${examIndex}">
+                            <input type="hidden" name="_captcha" value="false">
+                            <textarea name="feedback" class="feedback-textarea" placeholder="How did you feel about this exam? Any thoughts to share...">${exam.feedback}</textarea>
+                            <button type="submit" class="save-feedback-btn">Send Feedback</button>
+                            <button type="button" class="cancel-edit-btn" onclick="cancelEditFeedback(${examIndex})">Cancel</button>
+                        </form>
+                    </div>
+                `;
+            }
         }
-        function populateExamTimeline() {
-            const timeline = document.getElementById('examTimeline');
-            timeline.innerHTML = '';
-            const now = new Date();
-            exams.forEach((exam, i) => {
-                const examDate = parseExamDate(exam.date);
-                const diff = examDate - now;
-                let cardClass = '';
-                if (diff < 0) cardClass = 'completed';
-                else if (diff < 1000 * 60 * 60 * 24) cardClass = 'current';
-                const card = document.createElement('div');
-                card.className = `exam-card ${cardClass}`;
-                card.id = `exam-${i}`;
-                card.innerHTML = `
-                    <div class="exam-header">
-                        <span class="exam-date">${exam.date}</span>
-                        <span class="exam-subject">${exam.subject}</span>
-                    </div>
-                    <div class="exam-message">${exam.message}</div>
-                    <div class="countdown">
-                        <div class="countdown-item"><span class="countdown-number">0</span><span class="countdown-label">Days</span></div>
-                        <div class="countdown-item"><span class="countdown-number">0</span><span class="countdown-label">Hours</span></div>
-                        <div class="countdown-item"><span class="countdown-number">0</span><span class="countdown-label">Minutes</span></div>
-                    </div>
-                    <div class="feedback-section">
-                        <div class="feedback-display" style="display:${exam.feedback ? 'block' : 'none'}">
-                            <h4>Your Thoughts</h4>
-                            <p>${exam.feedback || ''}</p>
-                            <small>Submitted on: <span class="feedback-date"></span></small>
-                            <div class="feedback-actions">
-                                <button class="edit-feedback-btn" data-index="${i}">Edit Feedback</button>
-                            </div>
-                        </div>
-                        <form class="feedback-input" style="display:${exam.feedback ? 'none' : 'block'}">
-                            <h4>Share your thoughts</h4>
-                            <textarea class="feedback-textarea" required placeholder="Type your feedback..."></textarea>
+
+        // Function to edit feedback
+        function editFeedback(examIndex) {
+            createFeedbackForm(examIndex);
+        }
+
+        // Function to cancel feedback editing
+        function cancelEditFeedback(examIndex) {
+            const exam = exams[examIndex];
+            if (exam.feedback) {
+                updateFeedbackUI(examIndex, exam.feedback, "Previously submitted");
+            } else {
+                const feedbackSection = document.querySelector(`#exam-${examIndex} .feedback-section`);
+                feedbackSection.innerHTML = `
+                    <div class="feedback-input">
+                        <h4>Share Your Thoughts</h4>
+                        <form action="https://formsubmit.co/atharvmotghare07@gmail.com" method="POST" class="feedback-form">
+                            <input type="hidden" name="_subject" value="Exam Feedback: ${exam.subject}">
+                            <input type="hidden" name="exam_subject" value="${exam.subject}">
+                            <input type="hidden" name="exam_date" value="${exam.date}">
+                            <input type="hidden" name="_next" value="${window.location.href}#exam-${examIndex}">
+                            <input type="hidden" name="_captcha" value="false">
+                            <textarea name="feedback" class="feedback-textarea" placeholder="How did you feel about this exam? Any thoughts to share..."></textarea>
                             <button type="submit" class="save-feedback-btn">Send Feedback</button>
                         </form>
                     </div>
                 `;
-                timeline.appendChild(card);
-            });
-        }
-
-        // Feedback logic
-        function setupFeedback() {
-            document.querySelectorAll('.exam-card').forEach((card, i) => {
-                const exam = exams[i];
-                const feedbackDisplay = card.querySelector('.feedback-display');
-                const feedbackInput = card.querySelector('.feedback-input');
-                const textarea = card.querySelector('.feedback-textarea');
-                const saveBtn = card.querySelector('.save-feedback-btn');
-                const editBtn = card.querySelector('.edit-feedback-btn');
-                const dateSpan = card.querySelector('.feedback-date');
-                if (exam.feedback && dateSpan) {
-                    const saved = JSON.parse(localStorage.getItem('examFeedback') || '[]');
-                    dateSpan.textContent = saved[i]?.date || '';
-                }
-                if (feedbackInput) {
-                    feedbackInput.addEventListener('submit', e => {
-                        e.preventDefault();
-                        const feedback = textarea.value.trim();
-                        if (!feedback) return showToast('Please enter your feedback.', 'error');
-                        saveExamFeedback(i, feedback, card);
-                    });
-                }
-                if (editBtn) {
-                    editBtn.addEventListener('click', () => {
-                        feedbackDisplay.style.display = 'none';
-                        feedbackInput.style.display = 'block';
-                        textarea.value = exam.feedback;
-                    });
-                }
-            });
-        }
-        function saveExamFeedback(index, feedback, card) {
-            const exam = exams[index];
-            const currentDate = new Date().toLocaleString();
-            // Send via FormSubmit
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'https://formsubmit.co/atharvmotghare07@gmail.com'; // <-- your email
-            const fields = {
-                exam_subject: exam.subject,
-                exam_date: exam.date,
-                feedback_text: feedback,
-                submission_date: currentDate,
-                _subject: `Exam Feedback: ${exam.subject}`,
-                _template: 'table'
-            };
-            for (const [name, value] of Object.entries(fields)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = name;
-                input.value = value;
-                form.appendChild(input);
             }
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-            // Store locally
-            exam.feedback = feedback;
-            let saved = JSON.parse(localStorage.getItem('examFeedback') || '[]');
-            saved[index] = { feedback, date: currentDate };
-            localStorage.setItem('examFeedback', JSON.stringify(saved));
-            // Update UI
-            const feedbackDisplay = card.querySelector('.feedback-display');
-            const feedbackInput = card.querySelector('.feedback-input');
-            const dateSpan = card.querySelector('.feedback-date');
-            feedbackDisplay.querySelector('p').textContent = feedback;
-            if (dateSpan) dateSpan.textContent = currentDate;
-            feedbackDisplay.style.display = 'block';
-            feedbackInput.style.display = 'none';
-            showToast('Feedback sent successfully!');
         }
 
-        // Love notes
-        function showRandomLoveNote() {
-            const noteCard = document.getElementById('noteCard');
-            const randomIndex = Math.floor(Math.random() * loveNotes.length);
-            noteCard.innerHTML = `<p class="note-text">${loveNotes[randomIndex]}</p><p class="note-author">With endless love,</p>`;
-            noteCard.style.animation = 'fadeInUp 0.5s ease';
-            setTimeout(() => { noteCard.style.animation = ''; }, 500);
+        // Generate floating hearts for background
+        function generateFloatingHearts() {
+            floatingHearts.innerHTML = '';
+            const heartCount = Math.floor(window.innerWidth / 40); // Adjust heart density
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = '❤️';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.opacity = 0.1 + Math.random() * 0.5;
+                heart.style.fontSize = `${12 + Math.random() * 20}px`;
+                heart.style.animationDuration = `${5 + Math.random() * 10}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                floatingHearts.appendChild(heart);
+            }
         }
-        document.getElementById('newNoteBtn').addEventListener('click', showRandomLoveNote);
 
-        // Countdown
-        function updateCountdown() {
-            const now = new Date();
-            document.querySelectorAll('.exam-card').forEach((card, i) => {
-                const examDate = parseExamDate(exams[i].date);
-                const diff = examDate - now;
-                let days = 0, hours = 0, minutes = 0;
-                if (diff > 0) {
-                    days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        // Generate footer hearts
+        function generateFooterHearts() {
+            footerHearts.innerHTML = '';
+            const heartCount = Math.floor(window.innerWidth / 50);
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'footer-heart';
+                heart.textContent = '❤️';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.fontSize = `${10 + Math.random() * 10}px`;
+                heart.style.animationDuration = `${3 + Math.random() * 2}s`;
+                heart.style.animationDelay = `${Math.random() * 3}s`;
+                footerHearts.appendChild(heart);
+            }
+        }
+
+        // Scroll observer for animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
-                const nums = card.querySelectorAll('.countdown-number');
-                if (nums[0]) nums[0].textContent = days;
-                if (nums[1]) nums[1].textContent = hours;
-                if (nums[2]) nums[2].textContent = minutes;
+            });
+        }, { threshold: 0.1 });
+
+        // Update countdown timer
+        function updateCountdown() {
+            const currentDate = new Date();
+            const examCards = document.querySelectorAll('.exam-card');
+            
+            examCards.forEach((card, index) => {
+                const examDate = parseExamDate(exams[index].date);
+                const timeDiff = examDate - currentDate;
+                
+                if (timeDiff > 0) {
+                    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    const daysElement = card.querySelector('.countdown-number:nth-child(1)');
+                    const hoursElement = card.querySelector('.countdown-number:nth-child(3)');
+                    const minutesElement = card.querySelector('.countdown-number:nth-child(5)');
+                    
+                    if (daysElement) daysElement.textContent = days;
+                    if (hoursElement) hoursElement.textContent = hours;
+                    if (minutesElement) minutesElement.textContent = minutes;
+                }
             });
         }
-        setInterval(updateCountdown, 60000);
 
-        // Scroll progress
-        function addScrollProgress() {
-            const progress = document.querySelector('.scroll-progress');
-            window.addEventListener('scroll', () => {
-                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrolled = (winScroll / height) * 100;
-                progress.style.width = scrolled + '%';
-            });
-        }
-
-        // Toast
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `${type === 'success' ? '✅' : '❌'} <span>${message}</span>`;
-            document.querySelector('.toast-container').appendChild(toast);
-            setTimeout(() => { toast.classList.add('show'); }, 100);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // Smooth scrolling
+        // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                
+                window.scrollTo({
+                    top: target.offsetTop - 80,
+                    behavior: 'smooth'
+                });
             });
         });
 
-        // On load
-        window.addEventListener('DOMContentLoaded', () => {
-            loadPreferences();
+        // Event Listeners
+        newNoteBtn.addEventListener('click', showRandomLoveNote);
+
+        // Active link highlighting on scroll
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-menu a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Resize event
+        window.addEventListener('resize', () => {
+            generateFloatingHearts();
+            generateFooterHearts();
+        });
+
+        // Initialize all features
+        window.addEventListener('load', () => {
+            // Fade out preloader
+            setTimeout(() => {
+                preloader.classList.add('fade');
+            }, 1000);
+            
+            // Initialize main features
             populateExamTimeline();
             showRandomLoveNote();
-            setInterval(updateCountdown, 60000);
-            updateCountdown();
+            generateFloatingHearts();
+            generateFooterHearts();
+            
+            // Initialize additional features
+            loadPreferences();
             addScrollProgress();
-            setupFeedback();
+            setupKeyboardShortcuts();
+            setupToastNotifications();
+            
+            // Add calendar buttons to exam cards
+            document.querySelectorAll('.exam-card').forEach((card, index) => {
+                const exam = exams[index];
+                const calendarButton = document.createElement('button');
+                calendarButton.className = 'calendar-btn';
+                calendarButton.innerHTML = '📅 Add to Calendar';
+                calendarButton.onclick = () => addToCalendar(exam);
+                card.appendChild(calendarButton);
+            });
+
+            // Add animation observer for cards
+            document.querySelectorAll('.exam-card').forEach(card => {
+                observer.observe(card);
+            });
+            
+            // Parse URL for success message
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('feedback') && urlParams.get('feedback') === 'success') {
+                showToast('Your feedback was sent successfully! Thank you! ❤️');
+                
+                // Remove query parameters from URL without reloading
+                const newUrl = window.location.pathname + window.location.hash;
+                window.history.replaceState({}, document.title, newUrl);
+            }
         });
+
+        // Setup keyboard shortcuts info
+        const keyboardShortcutsToggle = document.querySelector('.keyboard-shortcuts-toggle');
+        const keyboardShortcuts = document.querySelector('.keyboard-shortcuts');
+        
+        keyboardShortcutsToggle.addEventListener('click', () => {
+            keyboardShortcuts.classList.toggle('show');
+        });
+
+        // Toast notifications
+        function setupToastNotifications() {
+            window.showToast = (message, type = 'success') => {
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.innerHTML = `
+                    ${type === 'success' ? '✅' : '❌'}
+                    <span>${message}</span>
+                `;
+                
+                document.querySelector('.toast-container').appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 100);
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            };
+        }
     </script>
 </body>
 </html>
